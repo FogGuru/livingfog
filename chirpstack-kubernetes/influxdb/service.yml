@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: influx
+  labels:
+    app: influx
+spec:
+  type: NodePort
+  ports:
+    - port: 8086
+      targetPort: 8086
+  selector:
+    app: influx
+  externalIPs:
+  - $myclusterIP

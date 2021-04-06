@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mosquitto
+  template:
+    metadata:
+      labels:
+        app: mosquitto
+    spec:
+      containers:
+      - name: mosquitto
+        image: eclipse-mosquitto
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 0.5
+            memory: 500Mi
+        ports:
+          - containerPort: 9001
+          - containerPort: 8883
+          - containerPort: 1883
+        volumeMounts:
+          - name: mosquitto
+            mountPath: /srv/mqtt/config
+            readOnly: false
+          - name: localtime
+            mountPath: /etc/localtime
+          - name: mosquitto-data
+            mountPath: /srv/mqtt/data
+            readOnly: false
+          - name: mosquitto-log
+            mountPath: /srv/mqtt/log
+            readOnly: false
+          - name: mosquitto-config
+            mountPath: /mosquitto/config/mosquitto.conf
+            subPath: mosquitto.conf
+          - name: password-file
+            mountPath: /mosquitto/config/passwd
+            subPath: passwd
+          - name: acl-file
+            mountPath: /mosquitto/config/acl
+            subPath: acl
+      volumes:
+        - name: mosquitto
+          persistentVolumeClaim:
+            claimName: mosquitto-config-pvc
+        - name: mosquitto-data
+          persistentVolumeClaim:
+            claimName: mosquitto-data-pvc
+        - name: mosquitto-log
+          persistentVolumeClaim:
+            claimName: mosquitto-logs-pvc
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: mosquitto-config
+          configMap:
+            name: mosquitto-config
+        - name: password-file
+          configMap:
+            name: password-file
+        - name: acl-file
+          configMap:
+            name: acl-file

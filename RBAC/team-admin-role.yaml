@@ -1,0 +1,21 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: $varnamespace
+  name: team-admin
+rules:
+- apiGroups: [""]
+  resources: ["pods","pods/log", "pods/portforward", 
+              "services", "services/logs"
+              ]
+  verbs: ["create","get", "list", "watch", "update", "patch", "delete"]
+
+- apiGroups: ["apps","extensions",]
+  resources: [ "deployments", "deployments/logs"
+              ]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["my-config"]
+  verbs: ["get"]

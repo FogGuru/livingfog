@@ -1,0 +1,10 @@
+- hosts: kube-cluster:children
+  become: yes
+  tasks:
+    - name: copy resolv.conf file
+      copy:
+        src: resolv.conf
+        dest: /etc/resolv.conf
+        owner: root
+    - name: prevent file from being overridden
+      shell: chattr -i /etc/resolv.conf

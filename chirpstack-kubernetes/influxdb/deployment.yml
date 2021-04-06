@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influx
+  labels:
+    app: influx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influx
+  template:
+    metadata:
+      labels:
+        app: influx
+    spec:
+      containers:
+        - image: influxdb:1.8.3
+          name: influx
+          ports:
+            - containerPort: 8086
+              name: influx
+          volumeMounts:
+            - name: influx-pv
+              mountPath: /var/lib/influxdb
+      volumes:
+        - name: influx-pv
+          persistentVolumeClaim:
+            claimName: influx-pv-claim

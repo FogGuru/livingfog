@@ -1,0 +1,12 @@
+Sensor,SensorReference,SensorTAG,SENSORIDBinary,SENSORIDASCII,NumberOfFields,BinaryTypeofvariable,BinarySizeperField,DefaultDecimalPrecision,Unit
+Batterylevel,N/A,SENSOR_BAT,52,BAT,1,uint8_t,1,0,%
+WaterpH,9328,SENSOR_WATER_PH,130,PH,1,float,4,2,N/A
+OxidationReduction Potential,9329,SENSOR_WATER_ORP,131,ORP,1,float,4,3,voltage
+Disolvedoxygen,9327,SENSOR_WATER_DO,132,DO,1,float,4,1,%
+WaterConductivity,9326,SENSOR_WATER_COND,133,COND,1,float,4,1,μS/cm
+WaterTemperature,9255,SENSOR_WATER_WT,134,WT,1,float,4,2,ºC
+Turbidity,9353, SENSOR_WATER_TURB,135,TURB,1,float,4,1,NTU
+pH(P&S!SOCKETA),9328,SENSOR_WATER_PH_A,136,PH_A,1,float,4,2,N/A
+pH(P&S!SOCKETE),9328,SENSOR_WATER_PH_E,137,PH_E,1,float,4,2,N/A
+ORP(P&S!SOCKETA),9329,SENSOR_WATER_ORP_A,138,ORP_A,1,float,4,3,voltage
+ORP(P&S!SOCKETE),9329,SENSOR_WATER_ORP_E,139,ORP_E,1,float,4,3,voltage

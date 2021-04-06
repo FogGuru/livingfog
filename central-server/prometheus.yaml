@@ -1,0 +1,206 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: monitoring
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: prometheus-data-pv
+  namespace: monitoring
+  labels:
+    app: prometheus
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/prometheus-data/"
+  persistentVolumeReclaimPolicy: Retain
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: prometheus-data-pvc
+  namespace: monitoring
+  labels:
+    app: prometheus
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus
+  namespace: monitoring
+rules:
+- apiGroups: [""]
+  resources:
+  - nodes
+  - nodes/proxy
+  - services
+  - endpoints
+  - pods
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs: ["get", "list", "watch"]
+- nonResourceURLs: ["/metrics"]
+  verbs: ["get"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+- kind: ServiceAccount
+  name: prometheus
+  namespace: monitoring    
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      external_labels:
+        monitor: 'global-monitor'
+    scrape_configs:
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['prometheus:9090']
+        tls_config:
+          insecure_skip_verify: true
+      - job_name: 'node'
+        scrape_interval: 50s
+        scrape_timeout:  5s
+        honor_labels: true
+        metrics_path: '/federate'
+        params:
+          'match[]':
+            - '{job="prometheus"}'
+            - '{__name__=~"job:.*"}'
+            - '{job="kubernetes-nodes"}'
+            - '{job="kubernetes-cadvisor"}'
+            # - '{name=~".+"}'
+            - '{job="kubernetes-service-endpoints"}'
+        static_configs:
+          - targets:
+            - '192.168.9.10:9090'
+            labels:
+              clusterID: Cluster1
+          - targets:
+            - '192.168.9.20:9090'
+            labels:
+              clusterID: Cluster2
+          - targets:
+            - '192.168.9.30:9090'
+            labels:
+              clusterID: Cluster3
+          - targets:
+            - '192.168.9.40:9090'
+            labels:
+              clusterID: Cluster4
+          - targets:
+            - '192.168.9.50:9090'
+            labels:
+              clusterID: Cluster5
+          - targets:
+            - '192.168.9.60:9090'
+            labels:
+              clusterID: Cluster6
+          - targets:
+            - '192.168.9.65:9090'
+            labels:
+              clusterID: Cluster7
+---    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: prometheus
+  name: prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - image: prom/prometheus:v2.23.0
+        name: prometheus
+        command:
+        - "/bin/prometheus"
+        args:
+        - "--config.file=/etc/prometheus/prometheus.yml"
+        - "--storage.tsdb.path=/prometheus"
+        - "--storage.tsdb.retention=91d"
+        ports:
+        - containerPort: 9090
+          protocol: TCP
+        volumeMounts:
+        - mountPath: "/prometheus"
+          name: data
+        - mountPath: "/etc/prometheus"
+          name: config-volume
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 1024m
+            memory: 2500Mi
+      serviceAccountName: prometheus
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+            claimName: prometheus-data-pvc
+      - name: config-volume
+        configMap:
+          name: prometheus-config
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: prometheus
+  name: prometheus
+  namespace: monitoring
+spec:
+  type: NodePort
+  ports:
+  - port: 9090
+    targetPort: 9090
+    nodePort: 30003
+  selector:
+    app: prometheus
+  externalIPs:
+  - 192.168.9.71
+  - 172.20.192.3

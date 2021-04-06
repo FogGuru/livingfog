@@ -1,0 +1,116 @@
+---
+
+- name: Run command modeprobe fuse
+  shell: modprobe fuse
+  tags: glusterfs-master
+
+- name: Ensure dependencies for GlusterFS are installed
+  apt:
+    name:
+      - gnupg2
+      - apt-transport-https
+      - ca-certificates
+    state: present
+  tags: glusterfs-master
+
+- name: Install GlusterFS server packages (Debian/Ubuntu)
+  when: ansible_os_family == "Debian"
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+  with_items:
+  - xfsprogs
+  - glusterfs-server
+  - glusterfs-client
+  tags: glusterfs-master
+
+- name: Enable and check GlusterFS service
+  systemd:
+    name: glusterd
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  register: started_glusterfs
+  tags: glusterfs-master
+
+- name: Peer all nodes together (GlusterFS)
+  shell: gluster peer probe "{{ item }}"
+  with_items: "{{ groups['node'] }}"
+  tags: glusterfs-master
+
+#- name: stop gluster volumes
+#  gluster_volume:
+#    state: stopped
+#    name: "{{ item }}"
+#  loop:
+#    - "mosquitto_volume"
+#    - "postgre_volume"
+#    - "influxdb_volume"
+#  tags: glusterfs-master
+#  ignore_errors: yes
+
+
+#- name: remove gluster volumes
+#  gluster_volume:
+#    state: absent
+#    name: "{{ item }}"
+#  loop:
+#    - "mosquitto_volume"
+#    - "postgre_volume"
+#    - "influxdb_volume"
+#  tags: glusterfs-master
+#  ignore_errors: yes            
+
+- name: create gluster volume mosquitto_volume
+  gluster_volume:
+    state: present
+    name: mosquitto_volume
+    bricks: "{{ item }}"
+    replicas: 2
+    rebalance: yes
+    force: yes
+    cluster: "{{ groups['node'] }}"
+  run_once: true
+  tags: glusterfs-master
+  ignore_errors: yes
+  with_items: "{{ mosquitto_volume }}" 
+
+- name: create gluster volume postgre_volume
+  gluster_volume:
+    state: present
+    name: postgre_volume
+    bricks: "{{ item }}"
+    replicas: 2
+    rebalance: yes
+    force: yes
+    cluster: "{{ groups['node'] }}"
+  run_once: true
+  tags: glusterfs-master
+  ignore_errors: yes
+  with_items: "{{ postgre_volume }}"
+
+- name: create gluster volume influxdb_volume
+  gluster_volume:
+    state: present
+    name: influxdb_volume
+    bricks: "{{ item }}"
+    replicas: 2
+    rebalance: yes
+    force: yes
+    cluster: "{{ groups['node'] }}"
+  run_once: true
+  tags: glusterfs-master
+  ignore_errors: yes
+  with_items: "{{ influxdb_volume }}"
+
+- name: start gluster volume
+  gluster_volume:
+    state: started
+    name: "{{ item }}"
+  loop:
+    - "mosquitto_volume"
+    - "postgre_volume"
+    - "influxdb_volume"
+  tags: glusterfs-master
+  ignore_errors: yes

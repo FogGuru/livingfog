@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chirpstack-application-server
+  labels:
+    app: chirpstack-application-server
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: chirpstack-application-server
+  template:
+    metadata:
+      labels:
+        app: chirpstack-application-server
+    spec:
+      containers:
+        - name: chirpstack-application-server
+          image: prrsjunior/chirpstack-application-server
+          env:
+          - name: POSTGRESQL__DSN
+            value: postgres://chirpstack_as:chirpstack_as@postgres/chirpstack_as?sslmode=disable
+          - name: REDIS__URL
+            value: redis://redis:6379
+          - name: APPLICATION_SERVER__INTEGRATION__MQTT__SERVER
+            value: tcp://mosquitto:1883
+          #- name: APPLICATION_SERVER__API__PUBLIC_HOST
+          #  value: localhost:8001
+          - name: APPLICATION_SERVER__EXTERNAL_API__JWT_SECRET
+            value: verysecret
+          ports:
+            - name: ui-port
+              containerPort: 8080
+            - name: join-port
+              containerPort: 8003
+            - name: http-port
+              containerPort: 8001
+            - name: monitoring-port
+              containerPort: 8101
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 250m
+              memory: 250Mi
+          volumeMounts:
+            - name: chirpstack-application-server
+              mountPath: /etc/chirpstack-application-server/chirpstack-application-server.toml
+              subPath: chirpstack-application-server.toml
+      volumes:
+        - name: chirpstack-application-server
+          configMap:
+            name: chirpstack-application-server

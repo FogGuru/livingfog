@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mosquitto-config
+data:
+  mosquitto.conf: |-
+    # Ip/hostname to listen to.
+    # If not given, will listen on all interfaces
+    #bind_address
+
+    # Port to use for the default listener.
+    port 1883
+
+    # Allow anonymous users to connect?
+    # If not, the password file should be created
+    allow_anonymous false
+
+    # if allow_anonymous is false, we should use password file to authenticate
+    password_file /mosquitto/config/passwd
+
+    acl_file /mosquitto/config/acl
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: password-file
+data:
+  passwd: |-
+    fogguru:$7$101$OsMky/RsfbpeUELq$EB/LjP5X5dvw6NQi5Ozeg9ik8ILiO7cKwkBIoez4oXag2qRJOSXvub1ig8HblPZiWtXYdBLBoajuzIhvuWoMLg==
+    participant:$7$101$s1j3Xvpe8WkuICVh$qePD2NJB/ipLbTwQFi/6+JCWBnVfc1LoehPvf2gikvUA6Cu6vu75e0O1dRg3bU8eEg4PXR6GpDCxH9h0RBJHrQ==
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: acl-file
+data:
+  acl: |-
+    #username "fogguru" have access to everything 
+    user fogguru
+    topic readwrite #
+
+    #general template that anyone can read from topic
+    user participant
+    topic read #

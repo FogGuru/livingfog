@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mosquitto
+  labels:
+    app: mosquitto
+spec:
+  type: NodePort
+#  clusterIP: None
+  ports:
+    - port: 1883
+      targetPort: 1883
+  selector:
+    app: mosquitto
+  externalIPs: #change the following Ip address according to your master node IP
+  - $myclusterIP

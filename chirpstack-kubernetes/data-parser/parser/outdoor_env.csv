@@ -1,0 +1,14 @@
+Sensor,SensorReference,SensorTAG,SENSORIDBinary,SENSORIDASCII,NumberOfFields,BinaryTypeofvariable,BinarySizeperField,DefaultDecimalPrecision,Unit
+Batterylevel,N/A,SENSOR_BAT,52,BAT,1,uint8_t,1,0,%
+Averagewinddirection,N/A,AGRX_GMX_AWD,211,AWD,1,uint16_t,2,0,º
+Averagewindspeed,N/A,AGRX_GMX_AWS,213,AWS,1,float,4,2,m/s
+Precipitationtotal,N/A,AGRX_GMX_PT,217,PT,1,float,4,3,mm
+Precipitationintensity,N/A,AGRX_GMX_PI,218,PI,1,float,4,3,mm
+Supplyvoltage,N/A,AGRX_GMX_SVO,226,SVO,1,float,4,1,V
+Solarradiation,N/A,AGRX_GMX_SR,228,SR_WS,1,uint16_t,2,0,W/m²
+Barometricpressure,N/A,AGRX_GMX_PRES,237,PRES_WS,1,float,4,1,hPa
+Pressureatsealevel,N/A,AGRX_GMX_PRES_SEA,238,PRESSL_WS,1,float,4,1,hPa
+Relativehumidity,N/A,AGRX_GMX_RH,240,RH_WS,1,uint16_t,2,0,%
+Airtemperature,N/A,AGRX_GMX_TEMP,241,TEM_WS,1,float,4,1,ºC
+AbsoluteHumidity,N/A,AGRX_GMX_AH,243,AH_WS,1,float,4,2,gm-3
+Airdensity,N/A,AGRX_GMX_AD,244,AD_WS,1,float,4,1,Kgm-3

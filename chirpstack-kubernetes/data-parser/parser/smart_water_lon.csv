@@ -1,0 +1,24 @@
+Sensor,SensorReference,SensorTAG,SENSORIDBinary,SENSORIDASCII,NumberOfFields,BinaryTypeofvariable,BinarySizeperField,DefaultDecimalPrecision,Unit
+Batterylevel,N/A,SENSOR_BAT,52,BAT,1,uint8_t,1,0,%
+CalciumIons,9352/9414,SENSOR_IONS_CA,100,SWICA,1,float,4,3,ppm
+FluorideIons,9353 / 9417,SENSOR_IONS_FL,101,SWIFL,1,float,4,3,ppm
+FluoroborateIons,9354,SENSOR_IONS_FB,102,SWIFB,1,float,4,3,ppm
+NitrateIons,9355 / 9421,SENSOR_IONS_NO3,103,SWINO3,1,float,4,3,ppm
+BromideIons,9356/ 9413,SENSOR_IONS_BR,104,SWIBR,1,float,4,3,ppm
+ChlorideIons,9357 / 9415,SENSOR_IONS_CL,105,SWICL,1,float,4,3,ppm
+CupricIons,9358 / 9416,SENSOR_IONS_CU,106,SWICU,1,float,4,3,ppm
+IodideIons,9360 / 9418,SENSOR_IONS_IO,107,SWIIO,1,float,4,3,ppm
+Ammonium,9412,SENSOR_IONS_NH4,108,SWINH4,1,float,4,3,ppm
+SilverIons,9362 / 9425,SENSOR_IONS_AG,109,SWIAG,1,float,4,3,ppm
+pH,9363 / 9411,SENSOR_IONS_PH,110,SWIPH,1,float,4,3,ppm
+LithiumIons,9419,SENSOR_IONS_LI,111,SWILI,1,float,4,3,ppm
+MagnesiumIons,9420,SENSOR_IONS_MG,112,SWIMG,1,float,4,3,ppm
+NitriteIons,9422,SENSOR_IONS_NO2,113,SWINO2,1,float,4,3,ppm
+PerchlorateIons,9423,SENSOR_IONS_CLO4,114,SWICLO4,1,float,4,3,ppm
+PotassiumIons,9424,SENSOR_IONS_K,115,SWIK,1,float,4,3,ppm
+SodiumIons,9426,SENSOR_IONS_NA,116,SWINA,1,float,4,3,ppm
+P&S!SOCKETA(ions),N/A,SENSOR_IONS_SOCKET_A,117,SWI_A,1,float,4,3,ppm
+P&S!SOCKETB(ions),N/A,SENSOR_IONS_SOCKET_B,118,SWI_B,1,float,4,3,ppm
+P&S!SOCKETC(ions),N/A,SENSOR_IONS_SOCKET_C,119,SWI_C,1,float,4,3,ppm
+P&S!SOCKETD(ions),N/A,SENSOR_IONS_SOCKET_D,120,SWI_D,1,float,4,3,ppm
+WaterTemperature,9255,SENSOR_IONS_WT,134,WT,1,float,4,2,ºC

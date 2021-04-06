@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-parser
+  labels:
+    app: data-parser
+spec:
+  selector:
+    matchLabels:
+      app: data-parser
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: data-parser
+    spec:
+      containers:
+      - name: data-parser
+        image: lillywu/data-parser:v6
+        env:
+        - name: MQTT_SERVER
+          value: mosquitto
+        - name: LOCAL_INFLUXDB
+          value: influx
+        - name: CENTRAL_INFLUXDB
+          value: "192.168.9.71"

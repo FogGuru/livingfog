@@ -1,0 +1,13 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: adminRoleBind
+  namespace: $varnamespace
+subjects:
+- kind: ServiceAccount
+  name: $varsaname
+  namespace: $varnamespace
+roleRef:
+  kind: Role
+  name: team-admin
+  apiGroup: rbac.authorization.k8s.io

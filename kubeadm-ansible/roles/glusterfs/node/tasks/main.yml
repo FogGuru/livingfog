@@ -1,0 +1,46 @@
+---
+
+- name: Run command modeprobe fuse
+  shell: modprobe fuse
+  tags: glusterfs-node
+
+- name: Ensure dependencies for GlusterFS are installed
+  apt:
+    name:
+      - gnupg2
+      - apt-transport-https
+      - ca-certificates
+    state: present  
+  tags: glusterfs-node
+
+- name: Install GlusterFS server packages (Debian/Ubuntu)
+  when: ansible_os_family == "Debian"
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+  with_items:
+  - xfsprogs
+  - glusterfs-server
+  - glusterfs-client
+  tags: glusterfs-node
+
+- name: Enable and check GlusterFS service
+  systemd:
+    name: glusterd
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  register: started_glusterfs
+  tags: glusterfs-node
+
+- name: Create GlusterFS directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  register: file_output
+  loop:
+    - "{{ mosquitto_volume }}"
+    - "{{ postgre_volume }}"
+    - "{{ influxdb_volume }}"
+  tags: glusterfs-node

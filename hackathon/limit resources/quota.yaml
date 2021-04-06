@@ -1,0 +1,12 @@
+#each fog cluster has 4 cpu cores and 4 GB RAM.
+#This quota specifies a limit of 1/4 of the available resource on the cluster to each namespace
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: mem-cpu-limit
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
