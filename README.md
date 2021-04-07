@@ -1,3 +1,16 @@
+# Abstract
+LivingFog is the fog computing platform developed by the [FogGuru European project](http://fogguru.eu). It allows users to connect IoT devices using the LoRa long-distance wireless protocol to local clusters of Raspberry PIs where data can be processed.
+
+- Long-distance communication with your IoT devices thanks to the LoRa wireless protocol
+- Local data processing enables real-time responses
+- Reduced network usage compared to a traditional IoT/Cloud system
+- The system keeps working even during network outages
+- Attractive application development thanks to NodeRed
+- Easy deployment of arbitrary software thanks to Kubernetes
+- Fully open architecture
+
+For more information please visit [http://www.fogguru.eu/livingfog/](http://www.fogguru.eu/livingfog/)
+
 # kube-deploy-lora
 ### Preparing the Raspberry Pis for running ansible
 
