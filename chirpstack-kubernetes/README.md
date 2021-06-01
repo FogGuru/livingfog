@@ -8,7 +8,9 @@ $ export myclusterIP=192.168.1.10
 ```
 
 ### Generate GlusterFS Endpoints files
-Edit the IP address range in the `generate_glusterfs_endpoints.sh` file first using a text editor
+Edit the glusterfs port numbers and IP address range in the `generate_glusterfs_endpoints.sh` file first using a text editor.
+
+To find the TCP port numbers of the gluster volumes, run the command `sudo gluster volume status`.
 
 ```
 for i in {11..19} -> change your cluster address range here
